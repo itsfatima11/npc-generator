@@ -4,7 +4,7 @@ import react from '@vitejs/plugin-react';
 
 export default defineConfig({
 plugins: [react()],
-base: '/npc-generator/', // <--- این خط رو اینجا اضافه کن (بین plugins و test)
+base: '/npc_generator/', // <--- این خط رو اینجا اضافه کن (بین plugins و test)
 test: {
 environment: 'jsdom',
 setupFiles: ['./src/test/setup.ts'],
