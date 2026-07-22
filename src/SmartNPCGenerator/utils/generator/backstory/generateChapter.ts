@@ -1,0 +1,2 @@
+import { selectFragment } from './selection';import { StoryAssembler } from './StoryAssembler';import type { SelectedStoryChapter, StoryChapterId, StoryContext, StoryState } from './types';
+export function generateChapter(id:StoryChapterId,context:StoryContext,state:StoryState):SelectedStoryChapter {const fragments=[selectFragment(id,'beginning',context,state),selectFragment(id,'development',context,state),selectFragment(id,'climax',context,state),selectFragment(id,'ending',context,state)] as const;return StoryAssembler.chapter(id,fragments,context,state);}

@@ -1,0 +1,2 @@
+import { generateChapter } from './generateChapter';import { appendChapter } from './state';import type { StoryContext,StoryState } from './types';
+export const CurrentSituationGenerator={generate(context:StoryContext,state:StoryState):StoryState{const currentPressure=`They must pursue ${state.facts.goalCause} without revealing ${state.facts.secretCause}`;const prepared={...state,facts:{...state.facts,currentPressure}};const chapter=generateChapter('current-situation',context,prepared);return appendChapter(prepared,chapter,{currentPressure});}} as const;

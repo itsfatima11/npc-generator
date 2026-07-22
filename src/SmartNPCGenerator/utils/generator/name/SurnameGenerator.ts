@@ -1,0 +1,2 @@
+import { pick } from '../deterministic';import type { NameCulture } from './types';
+export const SurnameGenerator={generate(culture:NameCulture,seed:string,attempt:number):string|null{if(culture.rules.surnameKind==='none')return null;const pool=culture.rules.surnameKind==='clan'?culture.clanNames:culture.familyNames;if(pool.length===0){if(culture.rules.surnameRequired)throw new Error(`Naming culture ${culture.id} requires a ${culture.rules.surnameKind} name.`);return null;}return pick(pool,seed,'name:surname',attempt);}} as const;

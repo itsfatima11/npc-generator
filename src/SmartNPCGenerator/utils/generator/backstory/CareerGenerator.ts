@@ -1,0 +1,2 @@
+import { generateChapter } from './generateChapter';import { appendChapter } from './state';import type { StoryContext,StoryState } from './types';
+export const CareerGenerator={generate(context:StoryContext,state:StoryState):StoryState{const chapter=generateChapter('career',context,state);return appendChapter(state,chapter,{careerFoundation:`Training and the first turning point led directly to work as a ${context.occupation.title}`});}} as const;

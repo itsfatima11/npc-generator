@@ -1,0 +1,7 @@
+import { HOOKS } from '../../constants';
+import { HookDifficulty } from '../../types';
+import { pick } from './deterministic';
+import { hookCategoriesFor } from './rules';
+import type { AdventureHookStage, SecretStage } from './types';
+
+export const AdventureHookGenerator={generate(context:SecretStage):AdventureHookStage {const categories=hookCategoriesFor(context.occupationData.category,Boolean(context.deity));const hooks=categories.map((category,index)=>{const source=pick(HOOKS.filter(h=>h.category===category),context.options.seed,`hook:${index}`,context.attempt);const person=context.relationships.rival?.person.name??context.relationships.bestFriend?.person.name??'a trusted contact';const difficulty=context.secret.riskLevel=== 'critical'?HookDifficulty.Deadly:context.secret.riskLevel==='high'?HookDifficulty.Hard:index===0?HookDifficulty.Moderate:HookDifficulty.Easy;return {title:source.title,summary:`${source.summary} ${context.backstorySignals.hookCause}. The matter involves ${person}, ${context.name}'s work as a ${context.occupationData.title.toLowerCase()}, and the objective to ${context.goal.currentGoal.toLowerCase()}. Evidence risks exposing their secret.`,difficulty,reward:`Progress toward ${context.goal.currentGoal.toLowerCase()}, plus support appropriate to ${context.wealth.replaceAll('-',' ')} means.`};});if(hooks.length!==3)throw new Error('Adventure hook generation must produce exactly three hooks.');return {...context,adventureHooks:[hooks[0],hooks[1],hooks[2]]};} } as const;

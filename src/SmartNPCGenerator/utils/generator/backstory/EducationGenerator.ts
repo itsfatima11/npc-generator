@@ -1,0 +1,2 @@
+import { generateChapter } from './generateChapter';import { appendChapter } from './state';import type { StoryContext,StoryState } from './types';
+export const EducationGenerator={generate(context:StoryContext,state:StoryState):StoryState{const chapter=generateChapter('education',context,state);const educationPath=`${context.occupation.requiredEducation} preparation directed toward ${context.occupation.title}`;return appendChapter(state,chapter,{educationPath});}} as const;

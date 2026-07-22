@@ -1,0 +1,22 @@
+import type { NPC } from '../../../types';import type { Campaign,City,Faction,TimelineEvent,World } from '../../world';
+export type QuestType='main-quest'|'side-quest'|'personal-quest'|'faction-quest'|'mystery'|'investigation'|'rescue'|'assassination'|'escort'|'defense'|'exploration'|'political'|'religious'|'treasure-hunt'|'horror'|'survival';
+export type QuestDifficulty='easy'|'medium'|'hard'|'deadly';
+export type QuestStatus='draft'|'available'|'active'|'completed'|'failed'|'abandoned';
+export type ObjectiveKind='travel'|'investigate'|'collect'|'protect'|'defeat'|'negotiate'|'discover'|'escape'|'recover'|'deliver';
+export type ObjectiveStatus='pending'|'active'|'completed'|'failed';
+export interface QuestObjective {readonly id:string;readonly kind:ObjectiveKind;readonly description:string;readonly locationId:string|null;readonly targetIds:readonly string[];readonly status:ObjectiveStatus;readonly evidence:readonly string[]}
+export interface QuestEncounter {readonly id:string;readonly title:string;readonly description:string;readonly locationId:string|null;readonly factionId:string|null;readonly enemyType:string;readonly difficulty:QuestDifficulty;readonly environment:string;readonly resolutionOptions:readonly string[];readonly evidence:readonly string[]}
+export type RewardType='gold'|'item'|'information'|'faction-reputation'|'ally'|'access'|'title'|'secret'|'political-influence';
+export interface QuestReward {readonly id:string;readonly type:RewardType;readonly name:string;readonly description:string;readonly sourceId:string;readonly value:string;readonly evidence:readonly string[]}
+export type ConsequenceOutcome='success'|'failure'|'partial-success';
+export interface QuestConsequence {readonly id:string;readonly outcome:ConsequenceOutcome;readonly description:string;readonly affectedNpcIds:readonly string[];readonly affectedFactionIds:readonly string[];readonly affectedLocationIds:readonly string[];readonly worldChanges:readonly string[];readonly npcReactions:readonly string[];readonly evidence:readonly string[]}
+export interface Quest {readonly id:string;readonly title:string;readonly description:string;readonly type:QuestType;readonly difficulty:QuestDifficulty;readonly location:string;readonly giver:string;readonly participants:readonly string[];readonly objectives:readonly QuestObjective[];readonly enemies:readonly QuestEncounter[];readonly allies:readonly string[];readonly rewards:readonly QuestReward[];readonly consequences:readonly QuestConsequence[];readonly relatedNPCs:readonly string[];readonly relatedFactions:readonly string[];readonly status:QuestStatus;readonly createdAt:string}
+export type QuestSourceKind='npc'|'location'|'faction'|'world-event';
+export interface QuestSourceSelection {readonly kind:QuestSourceKind;readonly id:string}
+export interface QuestGenerationInput {readonly source:QuestSourceSelection;readonly difficulty:QuestDifficulty;readonly requestedType?:QuestType;readonly campaign:Campaign;readonly world:World;readonly npcs:readonly NPC[];readonly idFactory?:()=>string;readonly now?:string}
+export interface QuestGenerationContext {readonly source:QuestSourceSelection;readonly npc:NPC|null;readonly city:City|null;readonly faction:Faction|null;readonly event:TimelineEvent|null;readonly campaign:Campaign;readonly world:World;readonly npcs:readonly NPC[];readonly difficulty:QuestDifficulty;readonly type:QuestType;readonly theme:string;readonly problem:string;readonly evidence:readonly string[];readonly idFactory:()=>string;readonly now:string}
+export interface QuestValidationIssue {readonly code:string;readonly field:keyof Quest|'context';readonly message:string;readonly severity:'error'|'warning'}
+export interface QuestGenerationResult {readonly quest:Quest|null;readonly issues:readonly QuestValidationIssue[];readonly stages:readonly ['source','theme','problem','objective','conflict','npc-involvement','rewards','consequences','validation']}
+export interface QuestChain {readonly id:string;readonly title:string;readonly questIds:readonly string[];readonly activeQuestId:string|null;readonly status:QuestStatus}
+export interface QuestMemoryEntry {readonly questId:string;readonly status:Extract<QuestStatus,'completed'|'failed'>;readonly resolvedAt:string;readonly consequences:readonly QuestConsequence[];readonly worldChanges:readonly string[];readonly npcReactions:readonly string[]}
+export interface QuestMemory {readonly campaignId:string;readonly quests:readonly Quest[];readonly chains:readonly QuestChain[];readonly history:readonly QuestMemoryEntry[]}

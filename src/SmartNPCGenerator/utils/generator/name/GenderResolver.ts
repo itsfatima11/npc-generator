@@ -1,0 +1,2 @@
+import { Gender } from '../../../types';import type { NameCulture,NameGender } from './types';
+export const GenderResolver={resolve(gender:Gender,culture:NameCulture):NameGender{if(culture.rules.order==='mononym'&&culture.neutralNames.length>0)return 'neutral';if(gender===Gender.Male&&culture.maleNames.length>0)return 'male';if(gender===Gender.Female&&culture.femaleNames.length>0)return 'female';if(culture.neutralNames.length>0)return 'neutral';return culture.maleNames.length>0?'male':'female';}} as const;

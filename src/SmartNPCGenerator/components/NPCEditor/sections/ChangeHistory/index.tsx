@@ -1,0 +1,3 @@
+import type { FieldChangeRecord } from '../../../../workspace';
+function summary(value:unknown):string{const result=typeof value==='string'?value:(JSON.stringify(value)??String(value));return result.length>100?`${result.slice(0,97)}…`:result;}
+export function ChangeHistory({history}:{readonly history:readonly FieldChangeRecord[]}){return <section className="editor-change-history"><h3>Change History</h3>{history.length===0?<p>No manual edits in this draft.</p>:<ol>{[...history].reverse().map(item=><li key={item.id}><strong>{item.field}</strong><span>{summary(item.oldValue)} → {summary(item.newValue)}</span><small>{item.user} · {new Date(item.changedAt).toLocaleString()}</small></li>)}</ol>}</section>}

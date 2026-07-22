@@ -1,0 +1,5 @@
+import { generateChapter } from './generateChapter';import { appendChapter } from './state';import type { StoryContext,StoryState } from './types';
+export const ConflictGenerator={
+  generateFirstMajorEvent(context:StoryContext,state:StoryState):StoryState{const firstTurningPoint=`A threat to family and livelihood forced a choice shaped by ${context.alignment.replaceAll('-',' ')}`;const prepared={...state,facts:{...state.facts,firstTurningPoint}};const chapter=generateChapter('first-major-event',context,prepared);return appendChapter(prepared,chapter,{firstTurningPoint});},
+  generateGreatestConflict(context:StoryContext,state:StoryState):StoryState{const faith=context.deity?` and obligations to ${context.deity.name}`:'';const centralConflict=`Professional duty collided with the needs of a close relationship${faith}, exploiting ${context.personality.greatestWeakness}`;const prepared={...state,facts:{...state.facts,centralConflict}};const chapter=generateChapter('greatest-conflict',context,prepared);return appendChapter(prepared,chapter,{centralConflict});},
+} as const;

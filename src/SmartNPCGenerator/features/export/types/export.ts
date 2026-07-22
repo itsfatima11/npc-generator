@@ -1,0 +1,19 @@
+import type { NPC } from '../../../types';import type { WorkspaceNPC } from '../../../workspace';import type { NPCFlavor } from '../../../utils/generator/flavor';import type { Inventory } from '../../items';import type { NPCStatBlock } from '../../statBlock';import type { Campaign,World } from '../../world';import type { StoredNPCImage } from '../../visualIdentity';
+export type ExportFormat='json'|'markdown'|'pdf'|'html'|'dnd-beyond-style'|'foundry-vtt'|'roll20'|'generic-vtt';
+export type ExportAudience='dm'|'player';
+export interface ExportMetadata {readonly title:string;readonly audience:ExportAudience;readonly mimeType:string;readonly fileExtension:string;readonly schemaVersion:1;readonly generator:'Smart NPC Studio';readonly warnings:readonly string[]}
+export interface ExportDocument {readonly id:string;readonly npcId:string;readonly format:ExportFormat;readonly createdAt:string;readonly content:string;readonly metadata:ExportMetadata}
+export interface WorldConnectionExport {readonly campaigns:readonly Pick<Campaign,'id'|'name'|'setting'|'status'>[];readonly cities:readonly {readonly id:string;readonly name:string;readonly environment:string}[];readonly factions:readonly {readonly id:string;readonly name:string;readonly type:string}[];readonly timelineEvents:readonly {readonly id:string;readonly date:string;readonly description:string}[]}
+export interface ExportSource {readonly record:WorkspaceNPC;readonly inventory:Inventory|null;readonly statBlock:NPCStatBlock|null;readonly worlds:readonly {readonly campaign:Campaign;readonly world:World}[];readonly portrait:StoredNPCImage|null;readonly portraitDataUrl:string|null}
+export type PlayerPersonality=Pick<NPC['personality'],'traits'|'ideals'|'likes'|'dislikes'|'greatestStrength'>;
+export type PlayerFlavor=Readonly<{voice:NPCFlavor['voice'];quote:Pick<NPCFlavor['quote'],'text'>;mannerisms:NPCFlavor['mannerisms']}>;
+export interface ExportPayload {readonly identity:Readonly<Record<string,string|number|null>>;readonly appearance:NPC['appearance'];readonly personality:NPC['personality']|PlayerPersonality;readonly backstory:readonly string[];readonly goal:NPC['goal']|null;readonly relationships:NPC['relationships']|null;readonly secret:NPC['secret']|null;readonly inventory:Inventory|null;readonly statBlock:NPCStatBlock|null;readonly adventureHooks:readonly string[];readonly worldConnections:WorldConnectionExport;readonly flavor:NPCFlavor|PlayerFlavor|null;readonly privateNotes:string|null;readonly portraitDataUrl:string|null}
+export interface ExportOptions {readonly format:ExportFormat;readonly audience:ExportAudience;readonly includePortrait:boolean;readonly includeWorldConnections:boolean;readonly pageSize:'a4'|'letter'|'tablet'}
+export interface ExportValidationIssue {readonly code:string;readonly field:'source'|'format'|'permissions'|'content'|'portrait';readonly severity:'error'|'warning';readonly message:string}
+export interface ExportResult {readonly document:ExportDocument|null;readonly issues:readonly ExportValidationIssue[]}
+export type ShareVisibility='public'|'private';export type SharePermission='view'|'download';
+export interface ShareRequest {readonly document:ExportDocument;readonly visibility:ShareVisibility;readonly permissions:readonly SharePermission[];readonly expiresAt:string|null}
+export interface ShareRecord {readonly id:string;readonly url:string;readonly visibility:ShareVisibility;readonly permissions:readonly SharePermission[];readonly expiresAt:string|null;readonly createdAt:string}
+export interface ShareProvider {create(request:ShareRequest):Promise<ShareRecord>;revoke(id:string):Promise<void>}
+export interface ExportConverter {readonly format:ExportFormat;convert(payload:ExportPayload,options:ExportOptions):string}
+export interface ExportPDFRenderer {render(document:ExportDocument):Promise<Blob>}
