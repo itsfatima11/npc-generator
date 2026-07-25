@@ -1,0 +1,14 @@
+import { Alignment } from '../types';
+import type { AlignmentData } from '../types';
+
+export const ALIGNMENTS = [
+  {id:Alignment.LawfulGood,name:'Lawful Good',description:'Seeks just outcomes through duty, reliable institutions, or a principled code.',personalityTendencies:['honorable','protective','disciplined'],commonMotivations:['defend the innocent','uphold a just oath','reform corrupt institutions']},
+  {id:Alignment.NeutralGood,name:'Neutral Good',description:'Prioritizes compassion and helpful results without treating rules or rebellion as ends in themselves.',personalityTendencies:['kind','pragmatic','generous'],commonMotivations:['relieve suffering','protect a community','give others a fair chance']},
+  {id:Alignment.ChaoticGood,name:'Chaotic Good',description:'Follows conscience and individual liberty when convention stands in the way of doing good.',personalityTendencies:['independent','empathetic','defiant'],commonMotivations:['free the oppressed','challenge tyranny','protect personal freedom']},
+  {id:Alignment.LawfulNeutral,name:'Lawful Neutral',description:'Values order, tradition, duty, or a personal code regardless of whether an outcome is kind or cruel.',personalityTendencies:['consistent','reserved','methodical'],commonMotivations:['preserve stability','fulfill a contract','maintain tradition']},
+  {id:Alignment.TrueNeutral,name:'True Neutral',description:'Responds to circumstances pragmatically or seeks balance without a strong commitment to moral or social extremes.',personalityTendencies:['practical','even-handed','adaptive'],commonMotivations:['preserve balance','avoid needless conflict','protect the natural order']},
+  {id:Alignment.ChaoticNeutral,name:'Chaotic Neutral',description:'Values personal freedom, spontaneity, and self-direction above external expectations.',personalityTendencies:['unpredictable','curious','self-directed'],commonMotivations:['escape restraint','seek novelty','choose an independent path']},
+  {id:Alignment.LawfulEvil,name:'Lawful Evil',description:'Uses hierarchy, contracts, and controlled systems to secure selfish or harmful ends.',personalityTendencies:['calculating','authoritarian','patient'],commonMotivations:['dominate an institution','enforce a cruel order','gain power through obligation']},
+  {id:Alignment.NeutralEvil,name:'Neutral Evil',description:'Pursues self-interest without compassion and adopts whatever method offers the clearest advantage.',personalityTendencies:['self-serving','ruthless','opportunistic'],commonMotivations:['profit at any cost','remove a rival','secure personal safety through betrayal']},
+  {id:Alignment.ChaoticEvil,name:'Chaotic Evil',description:'Indulges destructive desire, hatred, or greed with little regard for law, loyalty, or others.',personalityTendencies:['violent','volatile','merciless'],commonMotivations:['destroy opposition','spread terror','satisfy destructive impulses']},
+] as const satisfies readonly AlignmentData[];

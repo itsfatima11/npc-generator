@@ -1,0 +1,2 @@
+import type { SkillProficiency } from '../../types';
+export function SkillPanel({skills}:{readonly skills:readonly SkillProficiency[]}){return <section className="stat-list-panel"><h3>Skills</h3><ul>{skills.map(skill=><li key={skill.name}><div><strong>{skill.name}</strong>{skill.specialty&&<small>Specialty: {skill.specialty}</small>}</div><span>{skill.bonus>=0?'+':''}{skill.bonus} · {skill.proficiency}</span></li>)}</ul></section>}

@@ -1,0 +1,15 @@
+import { APPEARANCES } from '../../constants';
+import { HairLength, Wealth } from '../../types';
+import { pick } from './deterministic';
+import { OCCUPATION_APPEARANCE_MARKERS } from './rules';
+import type { AppearanceStage, LanguageStage } from './types';
+
+const HAIR_LENGTHS=[HairLength.Shaved,HairLength.Short,HairLength.Medium,HairLength.Long,HairLength.VeryLong];
+function appearanceValue(category:'skin'|'eyes'|'hair'|'face'|'style'|'movement',seed:string,attempt:number):string { return pick(APPEARANCES.filter(item=>item.category===category),seed,`appearance:${category}`,attempt).label; }
+export const AppearanceGenerator={generate(context:LanguageStage):AppearanceStage {
+  const ancestry=context.subraceData??context.raceData;const ageRatio=context.age/(ancestry.typicalLifespan??100);const occupational=OCCUPATION_APPEARANCE_MARKERS[context.occupationData.category]??[];
+  const wealthy=[Wealth.Wealthy,Wealth.Rich,Wealth.VeryRich,Wealth.Opulent].includes(context.wealth);
+  const ageFeatures=ageRatio>.75?['silvered hair','deep expression lines']:ageRatio>.5?['faint expression lines']:[];
+  const appearance={skinColor:appearanceValue('skin',context.options.seed,context.attempt),eyeColor:pick(['brown','hazel','gray','green','blue','amber'],context.options.seed,'appearance:eye-color',context.attempt),eyeShape:appearanceValue('eyes',context.options.seed,context.attempt),hairColor:ageRatio>.75?'silver-gray':pick(['black','brown','auburn','blond','white'],context.options.seed,'appearance:hair-color',context.attempt),hairStyle:appearanceValue('hair',context.options.seed,context.attempt),hairLength:pick(HAIR_LENGTHS,context.options.seed,'appearance:hair-length',context.attempt),facialHair:context.gender==='male'?pick(['clean-shaven','short beard','trimmed mustache'],context.options.seed,'appearance:facial-hair',context.attempt):'none',faceShape:appearanceValue('face',context.options.seed,context.attempt),nose:'proportional to their features',lips:'expressive',teeth:'well-used but cared for',ears:`typical of ${ancestry.name.toLowerCase()} heritage`,scars:occupational.filter(item=>item.includes('scar')||item.includes('burn')),tattoos:[],birthmarks:[],prosthetic:null,clothingStyle:wealthy?'well-tailored professional clothing':appearanceValue('style',context.options.seed,context.attempt),favoriteColors:pick([['deep blue','silver'],['forest green','brown'],['red','charcoal'],['cream','gold']],context.options.seed,'appearance:colors',context.attempt),jewelry:wealthy?['a quality signet or professional token']:[],accessories:[`${context.occupationData.title.toLowerCase()} tools`],walkingStyle:appearanceValue('movement',context.options.seed,context.attempt),facialExpression:context.alignment.includes('good')?'attentive and open':context.alignment.includes('evil')?'measured and appraising':'calm and observant',smell:context.occupationData.category==='crafting'?'smoke and worked materials':context.occupationData.category==='nature'?'earth and clean air':'soap and their workplace',distinguishingFeatures:[...occupational,...ageFeatures]};
+  return {...context,appearance};
+}} as const;

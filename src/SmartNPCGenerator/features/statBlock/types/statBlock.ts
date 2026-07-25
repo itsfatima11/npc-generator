@@ -1,0 +1,24 @@
+import type { Alignment } from '../../../types';import type { Inventory } from '../../items';
+export type RulesetId='srd-5.2.1';
+export type Ability='strength'|'dexterity'|'constitution'|'intelligence'|'wisdom'|'charisma';
+export type CreatureSize='tiny'|'small'|'medium'|'large'|'huge'|'gargantuan';
+export type ChallengeRating='0'|'1/8'|'1/4'|'1/2'|'1'|'2'|'3'|'4'|'5'|'6'|'7'|'8'|'9'|'10'|'11'|'12'|'13'|'14'|'15'|'16'|'17'|'18'|'19'|'20'|'21'|'22'|'23'|'24'|'25'|'26'|'27'|'28'|'29'|'30';
+export interface AbilityScore {readonly ability:Ability;readonly score:number;readonly modifier:number;readonly evidence:readonly string[]}
+export type AbilityScores=Readonly<Record<Ability,AbilityScore>>;
+export interface SavingThrow {readonly ability:Ability;readonly bonus:number;readonly proficient:boolean;readonly evidence:readonly string[]}
+export type SkillName='Acrobatics'|'Animal Handling'|'Arcana'|'Athletics'|'Deception'|'History'|'Insight'|'Intimidation'|'Investigation'|'Medicine'|'Nature'|'Perception'|'Performance'|'Persuasion'|'Religion'|'Sleight of Hand'|'Stealth'|'Survival';
+export interface SkillProficiency {readonly name:SkillName;readonly ability:Ability;readonly bonus:number;readonly proficiency:'none'|'proficient'|'expertise';readonly specialty:string|null;readonly evidence:readonly string[]}
+export interface SpeedProfile {readonly walk:number;readonly climb?:number;readonly swim?:number;readonly fly?:number;readonly unit:'ft.'}
+export interface Sense {readonly name:'passive Perception'|'darkvision'|'blindsight'|'tremorsense'|'truesight';readonly range:number;readonly unit:'ft.'|null;readonly evidence:readonly string[]}
+export interface StatAction {readonly id:string;readonly name:string;readonly kind:'attack'|'ability'|'social'|'spell';readonly description:string;readonly attackBonus:number|null;readonly damage:string|null;readonly saveDC:number|null;readonly evidence:readonly string[];readonly rulesStatus:'srd'|'derived'|'homebrew'}
+export interface SpellSlots {readonly level:0|1|2|3|4|5|6|7|8|9;readonly slots:number}
+export interface KnownSpell {readonly name:string;readonly level:0|1|2|3|4|5|6|7|8|9;readonly tradition:'arcane'|'divine'|'primal';readonly prepared:boolean;readonly evidence:readonly string[];readonly rulesStatus:'srd'|'homebrew'}
+export interface SpellcastingProfile {readonly ability:Ability;readonly level:number;readonly spellSaveDC:number;readonly spellAttackBonus:number;readonly slots:readonly SpellSlots[];readonly knownSpells:readonly KnownSpell[];readonly preparation:string}
+export interface CombatProfile {readonly style:string;readonly role:'controller'|'defender'|'skirmisher'|'striker'|'support'|'noncombatant';readonly averageDamagePerRound:number;readonly attackBonus:number;readonly evidence:readonly string[]}
+export interface NPCStatBlock {readonly id:string;readonly npcId:string;readonly ruleset:RulesetId;readonly name:string;readonly size:CreatureSize;readonly type:string;readonly alignment:Alignment;readonly armorClass:number;readonly armorDescription:string;readonly hitPoints:number;readonly hitDice:string;readonly speed:SpeedProfile;readonly abilityScores:AbilityScores;readonly savingThrows:readonly SavingThrow[];readonly skills:readonly SkillProficiency[];readonly senses:readonly Sense[];readonly languages:readonly string[];readonly challengeRating:ChallengeRating;readonly experiencePoints:number;readonly proficiencyBonus:number;readonly actions:readonly StatAction[];readonly bonusActions:readonly StatAction[];readonly reactions:readonly StatAction[];readonly legendaryActions:readonly StatAction[];readonly spellcasting:SpellcastingProfile|null;readonly equipment:Inventory|null;readonly combat:CombatProfile;readonly background:string;readonly notes:readonly string[];readonly generatedAt:string}
+export interface StatGenerationInput {readonly npcId:string;readonly inventory:Inventory|null;readonly ruleset?:RulesetId;readonly importance?:'ordinary'|'notable'|'major'|'legendary';readonly idFactory?:()=>string;readonly now?:string}
+export interface StatValidationIssue {readonly code:string;readonly field:keyof NPCStatBlock|'rules';readonly severity:'error'|'warning';readonly message:string}
+export interface StatGenerationResult {readonly statBlock:NPCStatBlock;readonly issues:readonly StatValidationIssue[];readonly valid:boolean}
+export interface CharacterSheetData {readonly statBlock:NPCStatBlock;readonly portraitUrl:string|null;readonly race:string;readonly occupation:string;readonly personality:readonly string[];readonly quote:string|null;readonly privateNotes:string}
+export interface StatBlockVTTExport {readonly format:'foundry-vtt'|'roll20-compatible';readonly version:1;readonly actor:Readonly<Record<string,unknown>>}
+export interface StatBlockPDFExporter {export(sheet:CharacterSheetData):Promise<Blob>}

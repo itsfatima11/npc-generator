@@ -1,0 +1,2 @@
+import { generateChapter } from './generateChapter';import { appendChapter } from './state';import type { StoryContext,StoryState } from './types';
+export const RelationshipGenerator={generate(context:StoryContext,state:StoryState):StoryState{const chapter=generateChapter('relationships',context,state);const person=context.relationships.bestFriend?.person.name??context.relationships.parents[0]?.person.name??'a trusted companion';return appendChapter(state,chapter,{centralRelationship:`A consequential bond with ${person} grew from career and family obligations`});}} as const;

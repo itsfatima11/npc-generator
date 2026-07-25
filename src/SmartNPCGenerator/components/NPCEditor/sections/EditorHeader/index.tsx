@@ -1,0 +1,2 @@
+import type { WorkspaceNPC } from '../../../../workspace';
+export function EditorHeader({record,dirty,onClose}:{readonly record:WorkspaceNPC;readonly dirty:boolean;readonly onClose:()=>void}){return <header className="npc-editor-header"><div><span className="eyebrow">Saved NPC editor</span><h2 id="npc-editor-title">{record.npc.name}</h2><p>Version {record.metadata.version} · {dirty?'Unsaved changes':'All changes saved'} · {record.metadata.author}</p></div><button type="button" onClick={onClose} aria-label="Close NPC editor">Close Editor</button></header>}

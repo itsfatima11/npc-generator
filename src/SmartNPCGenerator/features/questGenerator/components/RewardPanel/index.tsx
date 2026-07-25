@@ -1,0 +1,2 @@
+import type { QuestReward } from '../../types';
+export function RewardPanel({rewards}:{readonly rewards:readonly QuestReward[]}){return <section className="quest-subpanel"><h4>Rewards</h4>{rewards.length===0?<p>No credible reward was resolved.</p>:<ul>{rewards.map(reward=><li key={reward.id}><strong>{reward.name}</strong><span>{reward.type.replaceAll('-',' ')} · {reward.value}</span><p>{reward.description}</p></li>)}</ul>}</section>}

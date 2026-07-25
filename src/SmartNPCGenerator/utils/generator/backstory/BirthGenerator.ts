@@ -1,0 +1,2 @@
+import { generateChapter } from './generateChapter';import { appendChapter } from './state';import type { StoryContext,StoryState } from './types';
+export const BirthGenerator={generate(context:StoryContext,state:StoryState):StoryState{const chapter=generateChapter('birth',context,state);return appendChapter(state,chapter,{upbringing:`A ${context.subrace?.name??context.race.name} childhood rooted in ${context.birthplace}`});}} as const;
